@@ -10,9 +10,13 @@
        
         
         .big-cont{
-            /* position: relative; */
+            width: 100%;
+            position: relative;
+            background-image: url('./neon-lights-background-concept_23-2148451908.jpg');
+            background-position: center;
+            background-size: cover;
             /* overflow: hidden; */
-            /* height: 100vh; */
+            height: 100vh;
            
         }
         .triangle-class{
@@ -26,7 +30,18 @@
             position: fixed;
             top: 10px;
             left: 10px;
-            animation: movedown 2s linear infinite;
+            animation: movedown 1s linear infinite;
+        }
+        #score-display{
+            position:fixed;
+            top: 10px;
+            left: 10px;
+            color: white;
+             background-color: black;
+             /* width:100px ; 
+             height: 50px; */
+             padding: 15px 40px 15px 15px;
+             border-radius: 10px;
         }
         /* .triangle-class:nth-child(1){
             background-color: transparent;
@@ -128,6 +143,16 @@
         .dis{
             display: none;
         }
+        .score-display {
+            position: absolute;
+            color: red;
+            font-size: 20px;
+            font-weight: bold;
+            animation: floatUp 1s ease-out forwards;
+        }
+        .splash-effect {
+         animation: splash 0.5s forwards;  
+         }
 
         @keyframes movedown{
            0%{
@@ -137,23 +162,45 @@
             transform: translateY(100vh);
            }
         }
-
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+        }
+        @keyframes splash {
+           0% {
+                 transform: scale(1);
+                    opacity: 1;
+            }
+            100% {
+                transform: scale(0);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="big-cont">
         <div id="cont"></div>
        
-
+        <div id="score-display">Score: <span id="score-value">0</span></div>
     </div>
     
 </body>
 </html>
 <script>
+      let score = 0
     class Triangle {
-        constructor (id, sty){
+        constructor (id, sty, scoresty){
             this.id = id
             this.sty = sty
+            this.scoresty = scoresty
+            this.isgenerating = true
         }
          generatestyling(){
             const colorarray = ["red", "blue", "gold","green","blueviolet","plum", "yellowgreen"]
@@ -161,49 +208,63 @@
             const height = Math.floor(Math.random() * window.innerHeight ).toString() + 'px'
             const width = Math.floor(Math.random() * window.innerWidth ).toString() + 'px'
             const duration = Math.floor(Math.random() * 10 + 2).toString() + 's'
-             console.log(duration);
+            
              
             return {
                 color,
                 top:height,
                 left:width,
                 duration
-            }
-            
+            } 
          }
         display(){
             const container = document.getElementById(this.id);
-            setInterval(() => {
-                for (let i = 0; i < 7; i++) {
+            setTimeout(() => {
+                this.isgenerating = false
+               console.log("stop generating");
+                
+            }, 30000);
+        
+            const generateInterval = setInterval(() => {
+             if (!this.isgenerating) {
+               clearInterval(generateInterval);
+               return;
+              }
+
+            for (let i = 0; i < 7; i++) {
             const triangleDiv = document.createElement('button');
             const {color, left, top, duration} = this.generatestyling()
-              console.log(color);
               
             triangleDiv.className = this.sty;
             triangleDiv.style.borderBottomColor = color
             triangleDiv.style.left = left
             triangleDiv.style.top = top
             triangleDiv.style.animationDuration = duration
+
             container.appendChild(triangleDiv);
+          
+            triangleDiv.addEventListener("click",(e)=>{
+                score += 5
+                document.getElementById('score-value').innerText = score;
+                const scoreElement = document.createElement("h1");
+                scoreElement.className = this.scoresty;
+                scoreElement.innerText = "+5"; 
+
+                triangleDiv.appendChild(scoreElement); 
+                triangleDiv.classList.add("splash-effect");
+                      setTimeout(() => {
+                        triangleDiv.remove()
+                      }, 1000);
+                    
+            })
           }
             }, 5000);
             
-         let score = 0
-        document.querySelectorAll(`#${this.id} button`).forEach((el)=>{
-            el.addEventListener("click",(e)=>{
-              console.log(score += 5);
-              console.log(el);
-              
-              el.classList = "dis"
-
-              
-            })
-        })
-        
+           
         }
     }
    
-    new Triangle('cont','triangle-class').display()
+    new Triangle('cont','triangle-class',"score-display").display()
     
     
 </script>
