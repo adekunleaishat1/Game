@@ -205,31 +205,32 @@
          generatestyling(){
             const colorarray = ["red", "blue", "gold","green","blueviolet","plum", "yellowgreen"]
             const color = colorarray[Math.floor(Math.random() * colorarray.length)]
-            const height = Math.floor(Math.random() * window.innerHeight ).toString() + 'px'
-            const width = Math.floor(Math.random() * window.innerWidth ).toString() + 'px'
+            const triangleSize = 50; 
+            // const height = Math.floor(Math.random() * ( window.innerHeight - triangleSize)).toString() + 'px'
+            const width = Math.floor(Math.random() * ( window.innerWidth - triangleSize) ).toString() + 'px'
             const duration = Math.floor(Math.random() * 10 + 2).toString() + 's'
+            console.log(window.innerWidth);
+            
+            console.log(width);
+            
             
              
             return {
                 color,
-                top:height,
+                top:'10px',
                 left:width,
                 duration
             } 
          }
         display(){
             const container = document.getElementById(this.id);
-            setTimeout(() => {
-                this.isgenerating = false
-               console.log("stop generating");
-                
-            }, 30000);
+           
         
             const generateInterval = setInterval(() => {
-             if (!this.isgenerating) {
-               clearInterval(generateInterval);
-               return;
-              }
+            //  if (this.isgenerating) {
+              
+               
+            //   }
 
             for (let i = 0; i < 7; i++) {
             const triangleDiv = document.createElement('button');
@@ -260,6 +261,11 @@
           }
             }, 5000);
             
+            setTimeout(() => {
+                clearInterval(generateInterval);
+               console.log("stop generating");
+                
+            }, 30000);
            
         }
     }
