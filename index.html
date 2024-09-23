@@ -24,13 +24,14 @@
             border: none;
             width: 0;
             height: 0;
-            border-left: 50px solid transparent;
-            border-right: 50px solid transparent;
-            border-bottom: 100px solid red;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 50px solid red;
             position: fixed;
             top: 10px;
             left: 10px;
             animation: movedown 1s linear infinite;
+            cursor: pointer;
         }
         #score-display{
             position:fixed;
@@ -143,6 +144,17 @@
         .dis{
             display: none;
         }
+        .exitstyle{
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: red;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-weight: 700;
+            font-size: 20px;
+        }
         .score-display {
             position: absolute;
             color: red;
@@ -233,7 +245,7 @@
             //   }
 
             for (let i = 0; i < 7; i++) {
-            const triangleDiv = document.createElement('button');
+            const triangleDiv = document.createElement('div');
             const {color, left, top, duration} = this.generatestyling()
               
             triangleDiv.className = this.sty;
@@ -264,6 +276,10 @@
             setTimeout(() => {
                 clearInterval(generateInterval);
                console.log("stop generating");
+              const exittext = document.createElement('div')
+              exittext.innerText = "OOPS THE GAME HAS COME TO AN END!!!"
+              exittext.className = "exitstyle"
+               container.appendChild(exittext);
                 
             }, 30000);
            
